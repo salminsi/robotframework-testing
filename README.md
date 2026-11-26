@@ -1,16 +1,16 @@
 # Keskeneräinen harjoitustyö
 
-Tämä harjoitustyö on toteutettu osana kurssia Ohjelmistokehityksen teknologioita (ajankohtaiset teknologiat).
+Tämä harjoitustyö on toteutettu joulukuussa 2026 osana kurssia Ohjelmistokehityksen teknologioita (ajankohtaiset teknologiat) ja työn tavoitteena on tutustua ja opiskella itsenäisesti testiautomaatiotyökalun Robot Framework käyttöä.
 
 ## Taustat
 
-Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarvittavista vaiheista, kun otetaan Robot Framework käyttöön. Kerron hieman yleistä tietoutta Robot Frameworkista sekä ohjeistuksen siitä mitä on tarkoitus Robot Frameworkilla testata tässä projektissa. Ohjeistus mukailee kurssin tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Olen siis kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta Playwrightillä. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin testit toiseen sovellukseen, tähän palaan dokumentin myöhemmässä vaiheessa. 
+Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarpeellisista vaiheista otettaessa Robot Frameworkia käyttöön. Kerron hieman yleistä tietoutta Robot Frameworkista sekä ohjeistuksen, mitä testaan Robot Frameworkilla projektissani. Testattavien asioiden ohjeistus mukailee kurssin toista tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Eli olen kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta työkalulla Playwright. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin testit toiseen sovellukseen, tähän palaan dokumentin myöhemmässä vaiheessa. 
 
 *”Tutustun Robot Frameworkiin ja koitan tehdä saman harjoituksen kuin teimme Playwright-tehtävässä. Mahdollisuuksien mukaan, kun aikaa riittää, kirjoitan Robot-testejä Ohjelmistoprojekti 1 -sovelluksellemme.”*
 
 ## Aloitus ja asennus
 
-Harjoitustyön aloitin luomalla Ohjelmistoprojekti 1 -sovelluksellemme testejä. Sen jälkeen perustin tämän repositorion ja sille virtuaalisen ympäristön.
+Harjoitustyöni aloitin luomalla Ohjelmistoprojekti 1 -sovelluksellemme robot-testejä. Sen jälkeen perustin tämän repositorion ja projektini lokaaleille tiedostoille virtuaalisen ympäristön.
 
 Virtuaalisen ympäristön saat halutessasi näillä komennoilla (Windows), jotka ajetaan projektin juuressa, ennen muita Robot Frameworkin asennuksia:
 
@@ -38,20 +38,16 @@ HUOM. Itse ajoin nämä komennot ongelmitta, koska koneellani on NodeJS. Mikäli
 py -m pip install "robotframework-browser[bb]"
 ```
 
-Halutessasi voit tarkastaa onko NodeJS asennettuna:
+Halutessasi voit tarkastaa onko NodeJS asennettuna. Jos on, saat tuloksena versionumerot:
+
 ```cmd
 node -v
 npm -v
 ```
+![Node](./images/node.png)
+![Npm](./images/npm.png)
 
-Jos on, saat tuloksena versionumerot, esimerkiksi näin:
-
-node -v
-v26.7.0
-npm -v
-11.19.0
-
-Saatuasi asennukset kuntoon, voit muutaman testin tehtyäsi, taikka myöhemmin, ajaa vielä tämän:
+Kun Robot Framework ympäristö on kunnossa, voit muutaman testin tehtyäsi taikka myöhemmin, ajaa vielä tämän:
 
 ```cmd
 pip freeze > requirements.txt
@@ -63,17 +59,7 @@ Tiedostosta requirements.txt käyvät ilmi projektin riippuvuudet. Versionumeroi
 
 Aloitan laatimalla yksinkertaisen testin tiedostoon login.robot. Testi varmistaa vain selaimen ja testattavan sivuston aukeamisen. Sivuston title on nimetty "Example application", joten hyödynnän sitä:
 
-*** Settings ***
-Library    Browser
-
-*** Test Cases ***
-Open Login Page
-    New Browser    chromium
-    New Page    https://authentication-6o1.pages.dev/
-
-    Get Title    ==    Example application
-
-    Close Browser
+![Eka testi](./images/firsttest.png)
 
 ### Ajan testin:
 
@@ -81,33 +67,20 @@ Open Login Page
 py -m robot tests/login.robot
 ```
 
-==============================================================================
-Login                                                                         
-==============================================================================
-Open Login Page                                                       | PASS |
-------------------------------------------------------------------------------
-Login                                                                 | PASS |
-1 test, 1 passed, 0 failed
-==============================================================================
+![Eka testitulos](./images/firstresult.png)
 
 
 ### Testien suorittamisen jälkeen muodostuvat:
 
-report.html – testiraportti
-log.html – testiloki
-output.xml – testitulokset
+- report.html – testiraportti
+- log.html – testiloki
+- output.xml – testitulokset
 
-Muitakin tiedostoja, tai kansioita (kuten browser) saattaa tulla, ja nämä kannattaa lisätä .gitignoreen, jos projekti siirretään githubiin:
+Nämä sekä mahdolliset muut testiajojen muodostamat tiedostot ja kansiot kannattaa lisätä tiedostoon .gitignore, jos projekti siirretään githubiin. Lisää sinne myös:
 
-```gitignore
-.venv/              # Virtuaaliympäristö
+- .venv/ - virtuaaliympäristö
+- browser/ - Browser-kirjaston tiedostot
 
-log.html            # Robot Framework -loki
-report.html         # Robot Framework -raportti
-output.xml          # Robot Framework -tulokset
-
-browser/            # Browser-kirjaston tiedostot
-```
 
 
 
@@ -142,25 +115,25 @@ Lisää kuva onnistuneista testeistä (tässä repossa olevat). -->
 -------------
 # Tiivistelmä projektin teknologioista in english
 
-# Robot Framework Authentication Tests
+## Robot Framework Authentication Tests
 
 Test automation project built with Robot Framework and Browser Library.
 
-## Features
+### Features
 
 - Login testing
 - Registration testing
 - Positive and negative test cases
 - Browser automation
 
-## Technologies
+### Technologies
 
 - Robot Framework
 - Browser Library
 - Playwright Engine
 - Python
 
-## Run tests
+### Run tests
 
 ```cmd
 py -m robot tests
