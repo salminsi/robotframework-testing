@@ -1,7 +1,10 @@
-playwright-log.txt
+.venv/
 
 log.html
 report.html
 output.xml
+
+browser/
+playwright-log.txt
 
 __pycache__/
