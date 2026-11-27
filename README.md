@@ -2,9 +2,9 @@
 
 Tämä harjoitustyö on toteutettu joulukuussa 2026 osana kurssia Ohjelmistokehityksen teknologioita (ajankohtaiset teknologiat) ja työn tavoitteena on tutustua ja opiskella itsenäisesti testiautomaatiotyökalun Robot Framework käyttöä.
 
-## Taustat
+## Taustat ja johdanto
 
-Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarpeellisista vaiheista otettaessa Robot Frameworkia käyttöön. Kerron hieman yleistä tietoutta Robot Frameworkista sekä ohjeistuksen, mitä testaan Robot Frameworkilla projektissani. Testattavien asioiden ohjeistus mukailee kurssin toista tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Eli olen kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta työkalulla Playwright. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin testit toiseen sovellukseen, tähän palaan dokumentin myöhemmässä vaiheessa. 
+Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarpeellisista vaiheista otettaessa Robot Frameworkia käyttöön, kirjastona käytän Browseria. Kerron hieman yleistä tietoutta Robot Frameworkista sekä ohjeistuksen, minkälaisiin testitapauksiin kehitän ja suoritan testit Robot Frameworkilla tässä repositoriossa. Testattavien asioiden ohjeistus mukailee kurssin toista tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Eli olen kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta työkalulla Playwright. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin automaatiotestit toiseen sovellukseen, tähän palaan dokumentin myöhemmissä vaiheissa. 
 
 *”Tutustun Robot Frameworkiin ja koitan tehdä saman harjoituksen kuin teimme Playwright-tehtävässä. Mahdollisuuksien mukaan, kun aikaa riittää, kirjoitan Robot-testejä Ohjelmistoprojekti 1 -sovelluksellemme.”*
 
@@ -44,7 +44,7 @@ Halutessasi voit tarkastaa onko NodeJS asennettuna. Jos on, saat tuloksena versi
 node -v
 npm -v
 ```
-![Node](./images/node.png)
+![Node](./images/node.png)  
 ![Npm](./images/npm.png)
 
 Kun Robot Framework ympäristö on kunnossa, voit muutaman testin tehtyäsi taikka myöhemmin, ajaa vielä tämän:
@@ -81,20 +81,98 @@ Nämä sekä mahdolliset muut testiajojen muodostamat tiedostot ja kansiot kanna
 - .venv/ - virtuaaliympäristö
 - browser/ - Browser-kirjaston tiedostot
 
+Mikäli haluat ajaa testit headless -tilassa, jolloin testit suoritetaan ilman näkyvää selainta, niin testitiedostoon tulee lisätä headless=true.
+
+##  Settings, Variables, Keywords ja Test Cases
+
+Testitiedoston rakenne tyypillisesti pitää sisällään otsikon mukaisia osioita.
+
+### Settings
+
+Testin asetukset, kuten käytettävät kirjastot, testien tai testisarjan aloitus- ja lopetusasetukset sekä resurssitiedostot, jotka luodaan yksinkertaistamaan testien rakenteita.
+
+### Variables
+
+Osiossa määritellään käytettävät muuttujat, kuten URL-osoitteet tai muut toistuvat elementit, jolloin testien ylläpito helpottuu sekä tiedostosta saadaan helppolukuisempi.
+
+### Keywords
+
+Osiossa voidaan määritellä omia avainsanoja toistuvia "testiaskeleita" (esim. käyttäjätietojen syöttäminen) helpottamaan ja yksinkertaistamaan.
+
+### Test Cases
+
+Osio sisältää testitapaukset. Kaikki edellä lueteltujen osioiden asiat voisi sisällyttää tähän osioon, mutta se tekisi testitapauksista sekavia ja vaikealukuisia, lisäksi se olisi hyvien käytänteiden vastaista.
+
+Lähde: https://www.theseus.fi/server/api/core/bitstreams/af44cbe9-620c-43c4-9cf0-a6aacfae1245/content.
 
 
+## Testien toteuttaminen tehtävänannon mukaisesti
 
+Tätä tehtävää suorittaessani käytän hyödykseni ensisijaisesti Robot Frameworkin virallista sivustoa https://docs.robotframework.org/. Sivustolle on koottu hyödyllisiä oppaita, kuten https://docs.robotframework.org/docs/getting_started/how_to_write_rf ja https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html. Testit voidaan kirjoittaa vaikka muistioon ja ajaa komentokehotteen kautta, mutta koodieditorin käyttö tekee testien kirjoittamisesta huomattavasti mukavampaa, sekä helpottaa virheiden etsintää. Testit onnistuu ajastaa järjestelmään automaattisesti ajettavaksi tiettyyn aikaan, tai esimerkiksi säännöllisin väliajoin.
+
+### Tehtävänanto
+
+Testattava sivusto: https://authentication-6o1.pages.dev/.
+Huom. sivustolla tehdyt rekisteröitymiset ja kirjautumiset ovat voimassa vain saman istunnon sisällä, eivätkä säily testitapausten välillä.
+
+Tehtävässä hyödynnän aiemmin annetun Playwright-tehtävän valmiita käyttäjätunnuksia ja salasanoja, jotka piilotan ympäristömuuttujiin.
+
+Kussakin testitapauksessa tulee tehdä tarkoituksenmukaiset toimet (Click Element, Input Text, jne.) ja vaadittavat tarkastukset (Should Be Equal, Element Should Be Visible, jne.), jotta voidaan varmistaa, että testattava toiminnallisuus toimii odotetusti. Testitapauksissa tulee huomioida myös tyypilliset virhetilanteet (väärä salasana, pakollinen kenttä, jne.) ja niiden käsittely.
+
+#### Kirjautuminen (login.robot)
+
+- Palvelun etusivulla tulee olla kirjautumislomake, jossa on kentät sähköpostille ja salasanalle, sekä kirjautumisnappi.
+- Käyttäjä tulee ohjata onnistuneen kirjautumisen jälkeen osoitteeseen /dashboard, jossa näytetään tervetuloa-viesti.
+- Rekisteröityneen käyttäjän tulee voida kirjautua sisään sähköpostilla ja salasanalla.
+- Sekä käyttäjätunnus ja salasana ovat pakollisia, ja puuttuvista tiedoista tulee näyttää virheilmoitus.
+- Kirjautumisen tulee huomauttaa, mikäli käyttäjätunnus on väärässä muodossa tai salasana on liian lyhyt.
+- Kirjautumisen tulee estää kirjautumiset sekä tuntemattomalla käyttäjätunnuksella että väärällä salasanalla.  
+
+Lisäksi:  
+
+- Jos käyttäjä yrittää päästä suoraan /dashboard-sivulle ilman voimassa olevaa kirjautumista, hänet tulee ohjata kirjautumissivulle.
+- Kun kirjautunut käyttäjä kirjatuu ulos käyttäen "Logout" -painiketta, hänet tulee ohjata kirjautumissivulle.
+
+#### Rekisteröityminen (register.robot)
+
+- Rekisteröitymiseen tulee päästä sekä suoraan /signUp-osoitteesta että etusivun "Sign up" -linkistä.
+- Nimi, sähköposti ja salasana ovat rekisteröitymisessä pakollisia.
+- Sähköpostin tulee olla oikeassa muodossa ja salasanan riittävän pitkä, ja virheellisistä tiedoista tulee näyttää virheilmoitus.
+- Rekisteröitymisyritys jo rekisteröidyllä sähköpostilla näyttää virheilmoituksen.
+- Rekisteröityminen kelvollisilla tiedoilla luo tunnuksen, näyttää onnistumisviestin ja ohjaa kirjautumissivulle.
+- Rekisteröitymisessä luotua tiliä tulee voida käyttää kirjautumiseen heti rekisteröitymisen jälkeen (saman testitapauksen sisällä).
+
+
+### Toteutus
+
+Tehtävänantoon vastaavat testit loin tämän repositorion kansioon tests ja tiedostoihin login.robot sekä register.robot. Report.html oli tärkeä apuväline aina, kun testi ei mennyt läpi: raportti kannattaa avata selaimeen ja sieltä saa hyvin osviittaa siitä, mikä kohta testissä epäonnistuu ja miksi.
 
 
 # Harjoitustyön toinen osuus
 
-Sisällytin harjoitustyöhöni tässä repositoriossa tekemieni testien lisäksi testien tekemisen kurssille Ohjelmistoprojekti 1. Olemme ko. kurssilla tehneet lipunmyynti-sovellusta Fullstack -työnä ja otin tehtäväkseni koodata työhön käyttöliittymää (käyttäjän näkökulmasta) testaavia automaatiotestejä (end-to-end) Robot Frameworkilla. Kaikki Robot-testit sekä tiimitovereitani varten laatima readme.md -ohjeistus ovat minun käsialaani, ja ne löytyvät osoitteesta: https://github.com/YKKOSET/Lippumyynti-ohjelma/tree/main/robot-tests. Päivitän ja lisään testejä joulukuulle 2026 asti, jolloin projektityömme on määrä valmistua. 
+Sisällytin harjoitustyöhöni tässä repositoriossa tekemieni testien lisäksi testien tekemisen kurssille Ohjelmistoprojekti 1. Olemme ko. kurssilla tehneet lipunmyynti-sovellusta Fullstack -työnä ja otin tehtäväkseni koodata työhön käyttöliittymää (käyttäjän näkökulmasta) testaavia automaatiotestejä (end-to-end) Robot Frameworkilla. Kaikki Robot-testit sekä tiimitovereitani varten laatima readme.md -ohjeistus ovat minun käsialaani, ja ne löytyvät osoitteesta: https://github.com/YKKOSET/Lippumyynti-ohjelma/tree/main/robot-tests. Päivitän ja lisään testejä joulukuulle 2026 asti, jolloin projektimme on määrä valmistua. 
 
 
 # Tietoa työkalusta Robot Framework
 
 
+  
+    
+     
 
+
+
+Robot Frameworkin avulla voidaan esimerkiksi automatisoida jonkin järjestelmän ylläpitotoimia. Järjestelmä ajaa ajastetut testit huomattavan nopeasti. Samalla tarvittavat toimenpiteet tulevat varmemmin tehtyä riittävän usein.
+
+
+
+
+
+
+
+
+Robot Frameworkin viralliset video tutoriaalit:
+https://docs.robotframework.org/docs/getting_started/videos
 
 <!-- 
 # Tänne tulee Ohjelmistokehityksen teknologioiden kurssin harkkatyön raportti!
@@ -138,4 +216,5 @@ Test automation project built with Robot Framework and Browser Library.
 ```cmd
 py -m robot tests
 py -m robot tests/login.robot
+py -m robot --test "Open Login Page" tests/login.robot
 ```
