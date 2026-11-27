@@ -1,16 +1,16 @@
 # Keskeneräinen harjoitustyö
 
-Tämä harjoitustyö on toteutettu joulukuussa 2026 osana kurssia Ohjelmistokehityksen teknologioita (ajankohtaiset teknologiat) ja työn tavoitteena on tutustua ja opiskella itsenäisesti testiautomaatiotyökalun Robot Framework käyttöä.
+Tämä harjoitustyö on toteutettu loppuvuonna 2026 osana kurssia Ohjelmistokehityksen teknologioita (ajankohtaiset teknologiat) ja työn tavoitteena on tutustua ja opiskella itsenäisesti testiautomaatiotyökalun Robot Framework käyttöä.
 
 ## Taustat ja johdanto
 
-Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarpeellisista vaiheista otettaessa Robot Frameworkia käyttöön, kirjastona käytän Browseria. Kerron hieman yleistä tietoutta Robot Frameworkista sekä ohjeistuksen, minkälaisiin testitapauksiin kehitän ja suoritan testit Robot Frameworkilla tässä repositoriossa. Testattavien asioiden ohjeistus mukailee kurssin toista tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Eli olen kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta työkalulla Playwright. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin automaatiotestit toiseen sovellukseen, tähän palaan dokumentin myöhemmissä vaiheissa. 
+Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarpeellisista vaiheista otettaessa Robot Frameworkia käyttöön, kirjastona käytän Browseria. Kerron hieman yleistä tietoa Robot Frameworkista sekä ohjeistuksen, minkälaisiin testitapauksiin kehitän ja suoritan testit Robot Frameworkilla tässä repositoriossa. Testattavien asioiden ohjeistus mukailee kurssin toista tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Eli olen kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta työkalulla Playwright. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin automaatiotestit toiseen sovellukseen, tähän palaan dokumentin myöhemmissä vaiheissa. 
 
 *”Tutustun Robot Frameworkiin ja koitan tehdä saman harjoituksen kuin teimme Playwright-tehtävässä. Mahdollisuuksien mukaan, kun aikaa riittää, kirjoitan Robot-testejä Ohjelmistoprojekti 1 -sovelluksellemme.”*
 
 ## Aloitus ja asennus
 
-Harjoitustyöni aloitin luomalla Ohjelmistoprojekti 1 -sovelluksellemme robot-testejä. Sen jälkeen perustin tämän repositorion ja projektini lokaaleille tiedostoille virtuaalisen ympäristön.
+Harjoitustyöni aloitin luomalla Ohjelmistoprojekti 1 -sovelluksellemme robot-testejä. Sen jälkeen perustin tämän repositorion, sekä projektini lokaaleille tiedostoille virtuaalisen ympäristön.
 
 Virtuaalisen ympäristön saat halutessasi näillä komennoilla (Windows), jotka ajetaan projektin juuressa, ennen muita Robot Frameworkin asennuksia:
 
@@ -108,11 +108,13 @@ Lähde: https://www.theseus.fi/server/api/core/bitstreams/af44cbe9-620c-43c4-9cf
 
 ## Testien toteuttaminen tehtävänannon mukaisesti
 
-Tätä tehtävää suorittaessani käytän hyödykseni ensisijaisesti Robot Frameworkin virallista sivustoa https://docs.robotframework.org/. Sivustolle on koottu hyödyllisiä oppaita, kuten https://docs.robotframework.org/docs/getting_started/how_to_write_rf ja https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html. Testit voidaan kirjoittaa vaikka muistioon ja ajaa komentokehotteen kautta, mutta koodieditorin käyttö tekee testien kirjoittamisesta huomattavasti mukavampaa, sekä helpottaa virheiden etsintää. Testit onnistuu ajastaa järjestelmään automaattisesti ajettavaksi tiettyyn aikaan, tai esimerkiksi säännöllisin väliajoin.
+Tätä tehtävää suorittaessani käytän hyödykseni ensisijaisesti Robot Frameworkin virallista sivustoa https://docs.robotframework.org/. Sivustolle on koottu hyödyllisiä oppaita, kuten https://docs.robotframework.org/docs/getting_started/how_to_write_rf ja https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html.  
+
+Testit voidaan kirjoittaa vaikka muistioon ja ajaa komentokehotteen kautta, mutta koodieditorin käyttö tekee testien kirjoittamisesta huomattavasti mukavampaa, sekä helpottaa virheiden etsintää. Käytän tehtävää tehdessä VS Code Editoria, johon olen ladannut lisäosan RobotCode - Robot Framework Support. Nähtäväksi jää, auttaako lisäosa esimerkiksi koodivirheiden kanssa.
 
 ### Tehtävänanto
 
-Testattava sivusto: https://authentication-6o1.pages.dev/.
+Testattava sivusto: https://authentication-6o1.pages.dev/.  
 Huom. sivustolla tehdyt rekisteröitymiset ja kirjautumiset ovat voimassa vain saman istunnon sisällä, eivätkä säily testitapausten välillä.
 
 Tehtävässä hyödynnän aiemmin annetun Playwright-tehtävän valmiita käyttäjätunnuksia ja salasanoja, jotka piilotan ympäristömuuttujiin.
@@ -145,7 +147,7 @@ Lisäksi:
 
 ### Toteutus
 
-Tehtävänantoon vastaavat testit loin tämän repositorion kansioon tests ja tiedostoihin login.robot sekä register.robot. Report.html oli tärkeä apuväline aina, kun testi ei mennyt läpi: raportti kannattaa avata selaimeen ja sieltä saa hyvin osviittaa siitä, mikä kohta testissä epäonnistuu ja miksi.
+Tehtävänantoon vastaavat testit loin tämän repositorion kansioon tests ja tiedostoihin login.robot sekä register.robot. Report.html on tärkeä apuväline, kun testi ei mene läpi: raportti kannattaa avata selaimeen ja sieltä saa hyvin osviittaa siitä, mikä kohta testissä epäonnistuu ja miksi.
 
 
 # Harjoitustyön toinen osuus
@@ -160,9 +162,7 @@ Sisällytin harjoitustyöhöni tässä repositoriossa tekemieni testien lisäksi
     
      
 
-
-
-Robot Frameworkin avulla voidaan esimerkiksi automatisoida jonkin järjestelmän ylläpitotoimia. Järjestelmä ajaa ajastetut testit huomattavan nopeasti. Samalla tarvittavat toimenpiteet tulevat varmemmin tehtyä riittävän usein.
+Testit onnistuu ajastaa järjestelmään automaattisesti ajettavaksi tiettyyn aikaan, tai esimerkiksi säännöllisin väliajoin. Tällä tavoin Robot Frameworkin avulla voidaan esimerkiksi automatisoida jonkin järjestelmän ylläpitotoimia. Järjestelmä ajaa ajastetut testit huomattavan nopeasti. Samalla tarvittavat toimenpiteet tulevat varmemmin tehtyä riittävän usein.
 
 
 
@@ -171,8 +171,6 @@ Robot Frameworkin avulla voidaan esimerkiksi automatisoida jonkin järjestelmän
 
 
 
-Robot Frameworkin viralliset video tutoriaalit:
-https://docs.robotframework.org/docs/getting_started/videos
 
 <!-- 
 # Tänne tulee Ohjelmistokehityksen teknologioiden kurssin harkkatyön raportti!
@@ -190,10 +188,10 @@ Lisää kuva onnistuneista testeistä (tässä repossa olevat). -->
 
 
 
--------------
-# Tiivistelmä projektin teknologioista in english
+  
 
-## Robot Framework Authentication Tests
+
+## In english: Robot Framework Authentication Tests
 
 Test automation project built with Robot Framework and Browser Library.
 
