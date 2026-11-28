@@ -4,7 +4,7 @@ Tämä harjoitustyö on toteutettu loppuvuonna 2026 osana kurssia Ohjelmistokehi
 
 ## Taustat ja johdanto
 
-Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarpeellisista vaiheista otettaessa Robot Frameworkia käyttöön, kirjastona käytän Browseria. Kerron hieman yleistä tietoa Robot Frameworkista sekä ohjeistuksen, minkälaisiin testitapauksiin kehitän ja suoritan testit Robot Frameworkilla tässä repositoriossa. Testattavien asioiden ohjeistus mukailee kurssin toista tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Eli olen kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta työkalulla Playwright. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin automaatiotestit toiseen sovellukseen, tähän palaan dokumentin myöhemmissä vaiheissa. 
+Tässä tiedostossa kerron ohjeet tämän projektin pystyttämiseen, pyrkien syventämään tietoutta tarpeellisista vaiheista otettaessa Robot Frameworkia käyttöön, kirjastona käytän Browseria. Kerron hieman yleistä tietoa Robot Frameworkista sekä ohjeistuksen, minkälaisiin testitapauksiin kehitän ja suoritan testit Robot Frameworkilla tässä repositoriossa. Testattavien asioiden ohjeistus mukailee kurssin toista tehtävänantoa, joka on laadittu Playwright-testien tekemiseen. Eli olen kurssilla aiemmin toteuttanut nämä samat testit kertaalleen, mutta työkalulla Playwright ja kielenä TypeScript. Nyt opettelen itsenäisesti Robot Frameworkia tämän harjoitustyön parissa, kokemusta Robot Frameworkista minulla ei ennestään ole. Lisäksi osana harjoitustyötä laadin automaatiotestit toiseen sovellukseen, tähän palaan dokumentin myöhemmissä vaiheissa. 
 
 *”Tutustun Robot Frameworkiin ja koitan tehdä saman harjoituksen kuin teimme Playwright-tehtävässä. Mahdollisuuksien mukaan, kun aikaa riittää, kirjoitan Robot-testejä Ohjelmistoprojekti 1 -sovelluksellemme.”*
 
@@ -29,7 +29,7 @@ Tämän jälkeen otetaan käyttöön Robot Framework:
 ```cmd
 pip install robotframework
 pip install robotframework-browser
-rfbrowser init
+rfbrowser init chromium
 ```
 
 HUOM. Itse ajoin nämä komennot ongelmitta, koska koneellani on NodeJS. Mikäli se puuttuu, rfbrowser init ei luultavasti onnistu (https://medium.com/@zorozeri/test-automation-using-robot-framework-with-browser-library-1-f994af6f78b1). Tämän vuoksi voi olla suositellumpaa suorittaa asennus seuraavalla komennolla, jolloin NodeJS:ää ei tarvita (https://robotframework-browser.org/#start), koska se tulee lisäosana:
@@ -112,6 +112,13 @@ Tätä tehtävää suorittaessani käytän hyödykseni ensisijaisesti Robot Fram
 
 Testit voidaan kirjoittaa vaikka muistioon ja ajaa komentokehotteen kautta, mutta koodieditorin käyttö tekee testien kirjoittamisesta huomattavasti mukavampaa, sekä helpottaa virheiden etsintää. Käytän tehtävää tehdessä VS Code Editoria, johon olen ladannut lisäosan RobotCode - Robot Framework Support. Nähtäväksi jää, auttaako lisäosa esimerkiksi koodivirheiden kanssa.
 
+Testien kirjoittamista saattaa auttaa testin nauhoittaminen, jota en kuitenkaan itse käyttänyt. Tutkin kuitenkin, että saatavilla olisi kolmannen osapuolen paketti (https://pypi.org/project/robotframework-browser-recorder/), joka käyttää Playwrightin codegen-työkalua ja muuntaa tuloksen Robot Framework -syntaksiksi. Asennus tarvitaan:
+
+```cmd
+pip install robotframework-browser-recorder
+```
+
+
 ### Tehtävänanto
 
 Testattava sivusto: https://authentication-6o1.pages.dev/.  
@@ -147,12 +154,71 @@ Lisäksi:
 
 ### Toteutus
 
-Tehtävänantoon vastaavat testit loin tämän repositorion kansioon tests ja tiedostoihin login.robot sekä register.robot. Report.html on tärkeä apuväline, kun testi ei mene läpi: raportti kannattaa avata selaimeen ja sieltä saa hyvin osviittaa siitä, mikä kohta testissä epäonnistuu ja miksi.
+Tehtävänantoon vastaavat testit loin tämän repositorion kansioon tests ja tiedostoihin login.robot sekä register.robot. Report.html on tärkeä apuväline, kun testi ei mene läpi: raportti kannattaa avata selaimeen ja sieltä saa hyvin osviittaa siitä, mikä kohta testissä epäonnistuu ja miksi.  
+
+Alun haasteissa turvauduin Browser -kirjaston Record Selctorin käyttöön. Se ei nauhoita testiä, mutta palauttaa klikatun elementin selektorin:
+
+```robotframework
+*** Test Cases ***
+Poimi selektori
+    New Browser    chromium    headless=False
+    New Page    https://authentication-6o1.pages.dev/
+    ${selektori}=    Record Selector
+    Log To Console    ${selektori}
+    [Teardown]    Close Browser
+```
+
+Toinen haaste mitä kohtasin, oli etten saanut Robot Frameworkia suoraan lukemaan tiedostoa .env, jonne olen luetellut tunnukset ja salasanat. Tämän vuoksi loin erillisen python-tiedoston, jonka tehtävä on lukea arvot .env -tiedostosta ja antaan ne salaisina Robot-muuttujina testitiedostoille.
+
+Tämä edellytti asennusta:
+
+```cmd
+pip install python-dotenv
+```
+
+Muistutuksena, kun asennetaan virtuaaliympäristössä, tulee komentokehotteessa näkyä se polun alussa:
+(.venv) C:\Users\...jne
+
+Päivitä myös requirements.txt.
+
+Testitiedostossa otin muuttujat käyttöön:
+
+```robotframework
+*** Settings ***
+Library      Browser
+Variables    ../env.py
+```
+
+ja käytin niitä:
+```robotframework
+Fill Secret    input[type="email"]       ${JANE_USERNAME}
+Fill Secret    input[type="password"]    ${JANE_PASSWORD}
+```
+
+Env.py ei sisällä salaisuuksia, joten riittää kun .gitignoressa on estettynä .env. ja results/.
+Secret piilottaa arvot Robotin lokituksesta.
+
+Env. -tiedostoni on muodossa:
+
+```dotenv
+JANE_USERNAME=muuta-osoite@example.com
+JANE_PASSWORD='muuta-tieto'
+
+JOHN_USERNAME=muuta-osoite@example.com
+JOHN_PASSWORD='muuta-tieto'
+
+ALICE_USERNAME=muuta-osoite@example.com
+ALICE_PASSWORD='muuta-tieto'
+
+BOB_USERNAME=muuta-osoite@example.com
+BOB_PASSWORD='muuta-tieto'
+```
+
 
 
 # Harjoitustyön toinen osuus
 
-Sisällytin harjoitustyöhöni tässä repositoriossa tekemieni testien lisäksi testien tekemisen kurssille Ohjelmistoprojekti 1. Olemme ko. kurssilla tehneet lipunmyynti-sovellusta Fullstack -työnä ja otin tehtäväkseni koodata työhön käyttöliittymää (käyttäjän näkökulmasta) testaavia automaatiotestejä (end-to-end) Robot Frameworkilla. Kaikki Robot-testit sekä tiimitovereitani varten laatima readme.md -ohjeistus ovat minun käsialaani, ja ne löytyvät osoitteesta: https://github.com/YKKOSET/Lippumyynti-ohjelma/tree/main/robot-tests. Päivitän ja lisään testejä joulukuulle 2026 asti, jolloin projektimme on määrä valmistua. 
+Sisällytin harjoitustyöhöni testien tekemisen kurssille Ohjelmistoprojekti 1. Olemme ko. kurssilla tehneet lipunmyynti-sovellusta Fullstack -työnä ja otin tehtäväkseni koodata työhön automaatiotestejä, jotka testaavat käyttöliittymää käyttäjän näkökulmasta (end-to-end) Robot Frameworkilla. Kaikki Robot-testit sekä tiimitovereitani varten laatima readme.md -ohjeistus ovat minun käsialaani, ja ne löytyvät osoitteesta: https://github.com/YKKOSET/Lippumyynti-ohjelma/tree/main/robot-tests. Käyttöliittymän edetessä päivitän ja lisään testejä joulukuulle 2026 asti, jolloin projektimme on määrä valmistua. 
 
 
 # Tietoa työkalusta Robot Framework
@@ -191,23 +257,26 @@ Lisää kuva onnistuneista testeistä (tässä repossa olevat). -->
   
 
 
-## In english: Robot Framework Authentication Tests
+# In english: Robot Framework Authentication Tests
 
 Test automation project built with Robot Framework and Browser Library.
 
 ### Features
 
-- Login testing
+- Login and logout testing
 - Registration testing
 - Positive and negative test cases
 - Browser automation
+- Credentials read from a local .env -file
 
 ### Technologies
 
 - Robot Framework
-- Browser Library
+- Browser Library 
 - Playwright Engine
 - Python
+- python-dotenv
+- Node.js
 
 ### Run tests
 
