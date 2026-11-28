@@ -156,7 +156,7 @@ Lisäksi:
 
 Tehtävänantoon vastaavat testit loin tämän repositorion kansioon tests ja tiedostoihin login.robot sekä register.robot. Report.html on tärkeä apuväline, kun testi ei mene läpi: raportti kannattaa avata selaimeen ja sieltä saa hyvin osviittaa siitä, mikä kohta testissä epäonnistuu ja miksi.  
 
-Alun haasteissa turvauduin Browser -kirjaston Record Selctorin käyttöön. Se ei nauhoita testiä, mutta palauttaa klikatun elementin selektorin:
+Alun haasteissa turvauduin Browser -kirjaston Record Selectorin käyttöön. Se ei nauhoita testiä, mutta palauttaa klikatun elementin selektorin:
 
 ```robotframework
 *** Test Cases ***
@@ -168,7 +168,7 @@ Poimi selektori
     [Teardown]    Close Browser
 ```
 
-Toinen haaste mitä kohtasin, oli etten saanut Robot Frameworkia suoraan lukemaan tiedostoa .env, jonne olen luetellut tunnukset ja salasanat. Tämän vuoksi loin erillisen python-tiedoston, jonka tehtävä on lukea arvot .env -tiedostosta ja antaan ne salaisina Robot-muuttujina testitiedostoille.
+Toinen haaste mitä kohtasin, oli etten saanut Robot Frameworkia suoraan lukemaan tiedostoa .env, jonne olen luetellut tunnukset ja salasanat. Tämän vuoksi loin erillisen python-tiedoston, jonka tehtävä on lukea arvot .env -tiedostosta ja antaa ne salaisina Robot-muuttujina testitiedostoille.
 
 Tämä edellytti asennusta:
 
@@ -176,12 +176,12 @@ Tämä edellytti asennusta:
 pip install python-dotenv
 ```
 
-Muistutuksena, kun asennetaan virtuaaliympäristössä, tulee komentokehotteessa näkyä se polun alussa:
-(.venv) C:\Users\...jne
+Muistutuksena, kun asennetaan virtuaaliympäristössä, tulee komentokehotteessa näkyä se polun alussa:  
+__(.venv)__ C:\Users\...
 
 Päivitä myös requirements.txt.
 
-Testitiedostossa otin muuttujat käyttöön:
+Testitiedostossa otin salaiset muuttujat käyttöön:
 
 ```robotframework
 *** Settings ***
@@ -196,7 +196,7 @@ Fill Secret    input[type="password"]    ${JANE_PASSWORD}
 ```
 
 Env.py ei sisällä salaisuuksia, joten riittää kun .gitignoressa on estettynä .env. ja results/.
-Secret piilottaa arvot Robotin lokituksesta.
+Secret piilottaa arvot vain lokituksesta.
 
 Env. -tiedostoni on muodossa:
 
@@ -214,6 +214,7 @@ BOB_USERNAME=muuta-osoite@example.com
 BOB_PASSWORD='muuta-tieto'
 ```
 
+VS Codeen asentamaani lisäosaa käytin lopulta hyvin vähän. Pari syntaksivirhettä sain sen avulla korjattua, mutta en varsinaisesti omaksunut lisäosan käyttöä mukaan testien kirjoittamiseen.
 
 
 # Harjoitustyön toinen osuus
