@@ -10,3 +10,4 @@ playwright-log.txt
 __pycache__/
 
 .env
+results/
