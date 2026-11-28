@@ -5,6 +5,7 @@ natsort==8.4.0
 overrides==7.7.0
 protobuf==7.35.1
 psutil==7.2.2
+python-dotenv==1.2.4
 PyYAML==6.0.4
 robotframework==7.5.1
 robotframework-assertion-engine==5.0.1
